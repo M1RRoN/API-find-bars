@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import render
+from django.views.generic import TemplateView
 from django.views.generic.list import ListView
 from django.db.models import Q
 from rest_framework import generics
@@ -8,11 +9,20 @@ from django.contrib.auth.models import User
 from rest_framework.permissions import AllowAny
 
 from api_bars.serializers import CreateUserSerializer
+from categories.models import Category
 from establishments.models import Place
 
 
-def index(request):
-    return render(request, 'index.html')
+class IndexView(TemplateView):
+    template_name = 'index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        categories = Category.objects.all()
+        establishments = Place.objects.all()
+        context['categories'] = categories
+        context['establishments'] = establishments
+        return context
 
 
 class SearchView(ListView):

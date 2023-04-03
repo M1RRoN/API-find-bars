@@ -14,15 +14,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.contrib.auth.views import LogoutView, LoginView
 
 from django.urls import path, include, re_path
 from rest_framework.routers import DefaultRouter
 
 
-from api_bars.views import index, SearchView, CreateUserView, profile, CustomLoginView, CustomLogoutView
+from api_bars.views import SearchView, CreateUserView, profile, CustomLoginView, CustomLogoutView, IndexView
 from categories.views import CategoryViewSet
-from establishments.views import PlaceViewSet
+from establishments.views import PlaceViewSet, PlaceDetailView
 from reviews.views import ReviewViewSet
 
 router = DefaultRouter()
@@ -34,12 +33,13 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
     path('api/auth', include('rest_framework.urls', namespace='rest_framework')),
-    path('', index, name='index'),
+    path('', IndexView.as_view(), name='index'),
     path('search/', SearchView.as_view(), name='search'),
     path('register/', CreateUserView.as_view(), name='register'),
     path('accounts/profile/', profile, name='profile'),
     path('logout/', CustomLogoutView.as_view(), name='logout'),
     path('login/', CustomLoginView.as_view(), name='login'),
+    path('places/<int:pk>/', PlaceDetailView.as_view(), name='place-detail'),
 
     # path('auth/', include('djoser.urls')),
     # re_path(r'^auth/', include('djoser.urls.authtoken'))
