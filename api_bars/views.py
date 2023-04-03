@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import render
 from django.views.generic.list import ListView
 from django.db.models import Q
@@ -41,3 +42,16 @@ def profile(request):
     user = request.user
     context = {'user': user}
     return render(request, 'profile.html', context)
+
+class CustomLoginView(LoginView):
+    template_name = 'login.html' # здесь указываем имя шаблона для страницы входа
+
+    def form_valid(self, form):
+        remember_me = form.cleaned_data.get('remember_me') # здесь можно получить значение поля remember_me из формы входа
+        if not remember_me:
+            self.request.session.set_expiry(0) # если remember_me не выбрано, то сессия будет действительна только до закрытия браузера
+        return super().form_valid(form)
+
+
+class CustomLogoutView(LogoutView):
+    template_name = 'logout.html'
