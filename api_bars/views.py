@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.views.generic.list import ListView
 from django.db.models import Q
@@ -33,3 +34,10 @@ class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = CreateUserSerializer
     permission_classes = [AllowAny]
+
+
+@login_required
+def profile(request):
+    user = request.user
+    context = {'user': user}
+    return render(request, 'profile.html', context)

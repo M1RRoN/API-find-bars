@@ -19,7 +19,7 @@ from django.urls import path, include, re_path
 from rest_framework.routers import DefaultRouter
 
 
-from api_bars.views import index, SearchView, CreateUserView
+from api_bars.views import index, SearchView, CreateUserView, profile
 from categories.views import CategoryViewSet
 from establishments.views import PlaceViewSet
 from reviews.views import ReviewViewSet
@@ -36,6 +36,7 @@ urlpatterns = [
     path('', index, name='index'),
     path('search/', SearchView.as_view(), name='search'),
     path('register/', CreateUserView.as_view(), name='register'),
+    path('accounts/profile/', profile, name='profile'),
 
     # path('auth/', include('djoser.urls')),
     # re_path(r'^auth/', include('djoser.urls.authtoken'))
